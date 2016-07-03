@@ -30,22 +30,25 @@
       <div class="col-xs-12 well" ng-show="fates.character.name">
 
         <hgroup>
-          <h3>{{ fates.character.name }}</h3>
-          <h4>
-            {{ fates.character.sex | fatesSexes:'symbol' }}
-            <small>{{ fates.character.baseRole() | fatesSexes:'role':fates.character.sex }}</small>
-          </h4>
+          <h3>
+            {{ fates.character.name }}
+            <small>
+              {{ fates.character.sex | fatesSexes:'symbol' }}
+              {{ fates.character.baseRole() | fatesSexes:'role':fates.character.sex }}
+            </small>
+          </h3>
           <p ng-if="fates.character.spawnedBy">
             <span class="glyphicon glyphicon-baby-formula"></span>
             {{ fates.character.spawnedBy }}
           </p>
         </hgroup>
+        <hr />
 
         <div class="row">
 
-          <div class="col-xs-12 col-sm-6">
+          <div class="col-xs-12 col-sm-3">
             <div ng-if="fates.character.roles">
-              <h4>Roles</h4>
+              <h4>Classes</h4>
               <ul>
                 <li ng-repeat="role in fates.character.roles">
                   {{ role | fatesSexes:'role':fates.character.sex }}
@@ -54,36 +57,42 @@
             </div>
           </div>
 
-          <!-- <div class="col-xs-12 col-sm-6">
+          <div class="col-xs-12 col-sm-3">
             <h4>
               <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Friend Support <span class="caret"></span>
+                  {{ fates.character.friend ? fates.character.friend.name : 'Friend Support' }} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li ng-repeat="support in fates.character.friends" ng-click="fates.setCharacterSupport(support, 'friend')"><a>{{ support }}</a></li>
+                  <li ng-repeat="support in fates.character.friends" ng-click="fates.character.setSupport(support, 'friend')"><a>{{ support }}</a></li>
                   <li ng-if="!fates.character.friends">No friend supports available.</li>
                 </ul>
               </div>
             </h4>
 
-            <div ng-show="fates.characterSupport.friend">{{ fates.characterSupport.friend.name }}</div>
+            <div ng-if="fates.character.friend">
+              {{ fates.getSupportRole(fates.character.friend) || 'None' | fatesSexes:'role':fates.character.sex }}
+            </div>
+          </div>
 
+          <div class="col-xs-12 col-sm-3">
             <h4>
               <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Partner Support <span class="caret"></span>
+                  {{ fates.character.partner ? fates.character.partner.name : 'Partner Support' }} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li ng-repeat="support in fates.character.partners" ng-click="fates.setCharacterSupport(support, 'partner')"><a>{{ support }}</a></li>
+                  <li ng-repeat="support in fates.character.partners" ng-click="fates.character.setSupport(support, 'partner')"><a>{{ support }}</a></li>
                   <li ng-if="!fates.character.partners">No partner supports available.</li>
                 </ul>
               </div>
             </h4>
 
-            <div ng-show="fates.characterSupport.partner">{{ fates.characterSupport.partner.name }}</div>
+            <div ng-if="fates.character.partner">
+              {{ fates.getSupportRole(fates.character.partner) || 'None' | fatesSexes:'role':fates.character.sex }}
+            </div>
 
-          </div> -->
+          </div>
 
         </div>
       </div>

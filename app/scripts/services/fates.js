@@ -9,21 +9,21 @@
  */
 angular.module('appletsApp')
   .factory('fatesService', fatesService)
-  .service('fatesCharacter', fatesCharacterService)
+  .factory('FatesCharacter', FatesCharacterFactory)
   .service('fatesRole', fatesRoleService)
   .service('fatesSkill', fatesSkillService)
   ;
 
 // TODO: TESTING ALL THE THINGS
 
-fatesService.$inject = ['fatesCharacters', 'fatesRoles', 'fatesCharacter', 'fatesRole'];
+fatesService.$inject = ['fatesCharacters', 'fatesRoles', 'FatesCharacter', 'fatesRole'];
+FatesCharacterFactory.$inject = ['fatesCharacters'];
+// fatesRole.$inject = ['fatesRoles'];
 
-// function fatesService(fatesCharacters, fatesRoles, fatesSkills, fatesCharacter, fatesRole, fatesSkill) {
-function fatesService(fatesCharacters, fatesRoles, fatesCharacter, fatesRole) {
+function fatesService(fatesCharacters, fatesRoles, FatesCharacter, fatesRole) {
   // Service logic
   // ...
 
-  var character = {};
   var characters = fatesCharacters;
   var roles = fatesRoles;
 
@@ -32,6 +32,7 @@ function fatesService(fatesCharacters, fatesRoles, fatesCharacter, fatesRole) {
     listCharacters: listCharacters,
     getCharacter: getCharacter,
     getRole: getRole,
+    getSupportRole: getSupportRole,
     getRolesForCharacter: getRolesForCharacter,
     getSkillsForCharacter: getSkillsForCharacter,
     getSkillsForRole: getSkillsForRole,
@@ -48,13 +49,68 @@ function fatesService(fatesCharacters, fatesRoles, fatesCharacter, fatesRole) {
   }
 
   function getCharacter(characterName) {
-    var character = new fatesCharacter.set(characters[characterName]);
-    return character;
+    return FatesCharacter.getNew(characterName);
   }
 
   function getRole(roleName) {
     var role = roles[roleName];
     return new fatesRole.set(role);
+  }
+
+  function getSupportRole(character, supporter) {
+    // TODO: this is getting called twice each time, and idk why
+    // Most of this will go in role service
+    var specialRoles = ['Nohr Prince(ss)', 'Songstress', 'Villager', 'Kitsune', 'Wolfskin'];
+    var roleParallels = {
+      'Nohr Prince(ss)': null,
+      'Cavalier': 'Ninja',
+      'Knight': 'Spear Fighter',
+      'Fighter': 'Oni Savage',
+      'Mercenary': 'Samurai',
+      'Outlaw': 'Archer',
+      'Samurai': 'Mercenary',
+      'Oni Savage': 'Fighter',
+      'Spear Fighter': 'Knight',
+      'Diviner': 'Dark Mage',
+      'Monk/Shrine Maiden': null,
+      'Sky Knight': 'Wyvern Rider',
+      'Archer': 'Outlaw',
+      'Wyvern Rider': 'Sky Knight',
+      'Ninja': 'Cavalier',
+      'Apothecary': null,
+      'Dark Mage': 'Diviner',
+      'Troubadour': null,
+      'Wolfskin': 'Outlaw',
+      'Kitsune': 'Apothecary',
+      'Songstress': 'Troubadour',
+      'Villager': 'Apothecary',
+    };
+    //
+
+    var characterRole = character.baseRole();
+    var supporterRole = supporter.baseRole();
+    var supportRole = supporterRole; // first choice
+
+    if (supporterRole === characterRole ||
+        specialRoles.indexOf(supporterRole) != -1) {
+
+      // Get second role
+      var secondRole = supporter.roles[1];
+      supportRole = secondRole; // second choice
+
+      if (!secondRole ||
+          secondRole === characterRole ||
+          specialRoles.indexOf(secondRole) != -1) {
+
+        // Get parallel role
+        var parallelRole = roleParallels[supporterRole];
+        supportRole = parallelRole; // parallel choice
+
+      }
+    }
+
+    // Return null if character already has role
+    return (character.roles.indexOf(supportRole) === -1) ? supportRole : null;
   }
 
   // ---------- Multi-service (?)
@@ -75,27 +131,69 @@ function fatesService(fatesCharacters, fatesRoles, fatesCharacter, fatesRole) {
   }
 };
 
-function fatesCharacterService() {
-  var character = this;
+function FatesCharacterFactory(fatesCharacters) {
 
-  character.set = set;
-  character.baseRole = baseRole;
-  character.isChild = isChild;
+  // Constructor
 
-  function set(characterDetails) {
-    // name, sex, friends, partners, roles
-    angular.forEach(characterDetails, function(value, attr) {
-      character[attr] = value; // validate?
-    });
-    return character;
+  function FatesCharacter(name, sex, friends, partners, roles, spawnedBy) {
+    this.name = name;
+    this.sex = sex;
+    this.friends = friends;
+    this.partners = partners;
+    this.roles = roles;
+    this.spawnedBy = spawnedBy;
   }
 
+  // Instance methods (w/ prototype)
+
+  FatesCharacter.prototype.baseRole = baseRole;
+  FatesCharacter.prototype.isChild = isChild;
+  FatesCharacter.prototype.setSupport = setSupport;
+
+  // Class/static methods
+
+  FatesCharacter.getData = getData;
+  FatesCharacter.getNew = getNew;
+  FatesCharacter.fromData = fromData;
+
+  // Return constructor
+
+  return FatesCharacter;
+
+  // Instance method definitions
+
   function baseRole() {
-    return character.roles[0];
+    return this.roles[0];
   }
 
   function isChild() {
-    character.spawnedBy && character.spawnedBy.length;
+    return !!this.spawnedBy;
+  }
+
+  function setSupport(characterName, supportType) {
+    this[supportType] = FatesCharacter.getNew(characterName);
+  }
+
+  // Class/static method definitions
+
+  function getData(characterName) {
+    return fatesCharacters[characterName];
+  }
+
+  function getNew(characterName) {
+    var character = FatesCharacter.getData(characterName);
+    return FatesCharacter.fromData(character);
+  }
+
+  function fromData(characterData) {
+    return new FatesCharacter(
+      characterData.name,
+      characterData.sex,
+      characterData.friends,
+      characterData.partners,
+      characterData.roles,
+      characterData.spawnedBy
+    );
   }
 
 };

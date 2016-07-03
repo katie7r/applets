@@ -34,7 +34,11 @@
 
             <a class="navbar-brand" href="#/">
               applets
-              <small><span class="glyphicon glyphicon-apple red" aria-hidden="true"></span></small>
+              <small>
+                <span class="glyphicon glyphicon-apple red" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-apple green" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-apple gold" aria-hidden="true"></span>
+              </small>
             </a>
           </div>
 
@@ -45,6 +49,8 @@
               <li ng-class="{ active: nav.isActive('/mendel') }"><a ng-href="#/mendel">Mendel</a></li>
               <li ng-class="{ active: nav.isActive('/pokematchup') }"><a ng-href="#/pokematchup">PokeMU</a></li>
               <li ng-class="{ active: nav.isActive('/titleize') }"><a ng-href="#/titleize">Titleize</a></li>
+              <!-- <li ng-class="{ active: nav.isActive('/breadly') }"><a ng-href="#/breadly">Breadly</a></li>
+              <li ng-class="{ active: nav.isActive('/brickly') }"><a ng-href="#/brickly">Brickly</a></li> -->
             </ul>
           </div>
         </div>
@@ -92,10 +98,15 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/nav.js"></script>
         <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/breadly.js"></script>
+        <script src="scripts/controllers/brickly.js"></script>
         <script src="scripts/controllers/fates.js"></script>
         <script src="scripts/controllers/mendel.js"></script>
         <script src="scripts/controllers/titleize.js"></script>
         <script src="scripts/controllers/pokematchup.js"></script>
+        <script src="scripts/services/fates.js"></script>
+        <script src="scripts/services/fates.characters.js"></script>
+        <script src="scripts/services/fates.roles.js"></script>
         <!-- endbuild -->
 </body>
 </html>

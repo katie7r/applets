@@ -44,6 +44,16 @@ angular
         controller: 'TitleizeCtrl',
         controllerAs: 'titleize'
       })
+      .when('/breadly', {
+        templateUrl: 'views/breadly.html',
+        controller: 'BreadlyCtrl',
+        controllerAs: 'breadly'
+      })
+      .when('/brickly', {
+        templateUrl: 'views/brickly.html',
+        controller: 'BricklyCtrl',
+        controllerAs: 'brickly'
+      })
       .otherwise({
         redirectTo: '/'
       });

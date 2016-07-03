@@ -1,1 +1,14 @@
-<p>This is the fates view.</p>
+<h1>Fates</h1>
+
+<ul>
+  <li ng-click="fates.setCharacter('Azura')">Azura</li>
+  <li ng-click="fates.setCharacter('Kaden')">Kaden</li>
+  <li ng-click="fates.setCharacter('Scarlet')">Scarlet</li>
+  <li ng-click="fates.setCharacter('Selena')">Selena</li>
+</ul>
+
+<div class="well">
+
+{{ fates.character.name }}<br/>
+{{ fates.character.roles[0] }}<br/>
+</div>

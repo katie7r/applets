@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name appletsApp.controller:AboutCtrl
+ * @name appletsApp.controller:PokematchupCtrl
  * @description
- * # AboutCtrl
+ * # PokematchupCtrl
  * Controller of the appletsApp
  */
 angular.module('appletsApp')
-  .controller('AboutCtrl', function () {
+  .controller('PokematchupCtrl', function () {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',

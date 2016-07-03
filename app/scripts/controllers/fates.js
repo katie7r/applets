@@ -16,14 +16,18 @@ function FatesCtrl(fatesService) {
   var vm = this;
 
   vm.character = {};
-  // vm.characterSupport = {};
+  vm.getCharacter = getCharacter;
   vm.setCharacter = setCharacter;
   vm.getSupportRole = getSupportRole;
   // vm.setCharacterSupport = setCharacterSupport;
   vm.characterList = fatesService.listCharacters();
 
+  function getCharacter(characterName) {
+    return fatesService.getCharacter(characterName)
+  }
+
   function setCharacter(characterName) {
-    vm.character = fatesService.getCharacter(characterName);
+    vm.character = vm.getCharacter(characterName);
   }
 
   function getSupportRole(supporter) {

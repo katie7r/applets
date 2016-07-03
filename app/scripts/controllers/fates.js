@@ -10,19 +10,25 @@
 angular.module('appletsApp')
   .controller('FatesCtrl', FatesCtrl);
 
-FatesCtrl.$inject = ['fatesFactory', 'fatesCharacters'];
+FatesCtrl.$inject = ['fatesService'];
 
-function FatesCtrl(fatesFactory, fatesCharacters) {
+function FatesCtrl(fatesService) {
   var vm = this;
 
-  vm.characters = fatesCharacters;
   vm.character = {};
+  // vm.characterSupport = {};
   vm.setCharacter = setCharacter;
+  // vm.setCharacterSupport = setCharacterSupport;
+  vm.characterList = fatesService.listCharacters();
 
   function setCharacter(characterName) {
-    vm.character = vm.characters[characterName];
-    // vm.character = fatesFactory.getCharacter(characterName);
+    // vm.character = vm.characters[characterName];
+    vm.character = fatesService.getCharacter(characterName);
   }
+
+  // function setCharacterSupport(characterName, support) {
+  //   vm.characterSupport[support] = fatesService.getCharacter(characterName);
+  // }
 
 
 
